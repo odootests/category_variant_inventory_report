@@ -2,26 +2,32 @@
    <data>
       <template id='show_current_stock'>
          <title>Current Inventory</title>
-         <div class='col-md-6'>
-            <h3> Product List - Current Status of Inventory</h3>
-            <ol>
-               <t t-foreach='current_stock' t-as='current_product'>
-                  <li> <t t-esc='current_product.name'/> </li>
-               </t>
-            </ol>
-         </div>
-         <div class='col-md-6'>
-            <h3> Extra Info</h3>
-            <ul>
-               <li t-foreach='current_stock' t-as='dbrecord'>
-                  <dt>
-                     <t t-foreach='dbrecord._fields' t-as='field'>
-                        <p> <strong> <t t-esc='field'/> </strong> <t t-esc='dbrecord[field]'/> </p>
+            <div class='container'>
+               <div class='col-md-6'>
+                  <h3> Product List - Current Status of Inventory</h3>
+                  <ol>
+                     <t t-foreach='current_stock' t-as='current_product'>
+                        <li> 
+                           <strong> Name: </strong> <t t-esc='current_product.product_id.name'/> 
+                           <strong> Qty: </strong> <t t-esc='current_product.qty'/>
+                           <strong> PTI: </strong> <t t-esc='current_product.product_template_id.id'/>
+                        </li>
                      </t>
-                  </dt>
-               </li>
-            </ul>
-         </div>
+                  </ol>
+               </div>
+               <div class='col-md-6'>
+                  <h3> Extra Info</h3>
+                  <ul>
+                     <li t-foreach='current_stock' t-as='dbrecord'>
+                        <dt>
+                           <t t-foreach='dbrecord._fields' t-as='field'>
+                              <p> <strong> <t t-esc='field'/> </strong> <t t-esc='dbrecord[field]'/> </p>
+                           </t>
+                        </dt>
+                     </li>
+                  </ul>
+               </div>
+            </div>
       </template>
    </data>
 </odoo>
