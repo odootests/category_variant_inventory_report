@@ -8,5 +8,5 @@
    'version': '0.1',
    'depends': ['base', 'website', 'stock'],
    'application': True,
-   #'data': ['views/views.xml']
+   'data': ['views/views.xml']
 }
