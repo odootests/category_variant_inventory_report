@@ -5,7 +5,19 @@
 				<h3> Product List - Current Status of Inventory</h3>
 				<table class='table'>
 					<thead>
-						<th>#</th> <th>Def_Name</th> <th>Int_Ref</th> <th>Disp_Name</th>	<th>PCAT_Name</th> <th>PCAT_DName</th> <th>Qty</th>	<th>Sale </th>	<th>LOC_ID</th> <th>PT_ID</th> <th>PT_Name</th> <th>PTCAT_ID</th> 
+						<th>#</th>
+						<th>Def_Name</th>
+						<th>Int_Ref</th>
+						<th>Disp_Name</th>
+						<th>PCAT_Name</th>
+						<th>PCAT_DName</th>
+						<th>PATTRLN_ID</th>
+						<th>Qty</th>
+						<th>Sale </th>
+						<th>LOC_ID</th>
+						<th>PT_ID</th>
+						<th>PT_Name</th>
+						<th>PTCAT_ID</th>
 					</thead>
 					<tbody>
 						<t t-set='count' t-value='1'/>
@@ -16,6 +28,7 @@
 							<td> <t t-esc='current_product.product_id.display_name'/> </td>
 							<td> <t t-esc='current_product.product_id.categ_id.name'/> </td>
 							<td> <t t-esc='current_product.product_id.categ_id.display_name'/> </td>
+							<td> <t t-esc='current_product.product_attribute_line_id'/> </td>
 							<td> <t t-esc='current_product.qty'/> </td>
 							<td> <t t-esc='current_product.product_id.list_price'/> </td>
 							<td> <t t-esc='current_product.location_id.name'/> </td>
@@ -23,6 +36,23 @@
 							<td> <t t-esc='current_product.product_template_id.name'/></td>
 							<td> <t t-esc='current_product.product_template_id.categ_id.id'/></td>
 						</tr>
+						<tr>
+							<td> Sth </td>
+							<td> <t t-esc='first_record.product_id.name'/> </td>
+							<td> <t t-esc='first_record.product_id.default_code'/> </td>
+							<td> <t t-esc='first_record.product_id.display_name'/> </td>
+							<td> <t t-esc='first_record.product_id.categ_id.name'/> </td>
+							<td> <t t-esc='first_record.product_id.categ_id.display_name'/> </td>
+							<td> <t t-esc='first_record.product_attribute_line_id'/> </td>
+							<td> <t t-esc='first_record.qty'/> </td>
+							<td> <t t-esc='first_record.product_id.list_price'/> </td>
+							<td> <t t-esc='first_record.location_id.name'/> </td>
+							<td> <t t-esc='first_record.product_template_id.id'/> </td>
+							<td> <t t-esc='first_record.product_template_id.name'/></td>
+							<td> <t t-esc='first_record.product_template_id.categ_id.id'/></td>
+						</tr>
+
+
 					</tbody>
 				</table>
 
