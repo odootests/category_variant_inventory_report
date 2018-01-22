@@ -6,6 +6,8 @@ class InventoryReports(models.Model):
 	product_template_id_name = fields.Char(compute='get_product_template_id_name', store=True)
 	product_attribute_id = fields.Integer(compute='get_product_attribute_id', store=True)
 	product_attribute_id_name = fields.Char(compute='get_product_attribute_id_name', store=True)
+	product_category_id = fields.Integer(compute='get_product_category_id', store=True)
+	product_category_id_name = fields.Char(compute='get_product_category_id_name', store=True)
 	product_attribute_value_id = fields.Integer(compute='get_product_attribute_value_id', store=True)
 	product_attribute_value_id_name = fields.Char(compute='get_product_attribute_value_id_name', store=True)
 
@@ -19,37 +21,50 @@ class InventoryReports(models.Model):
 	def get_product_template_id_name(self):
 		product_template_table = self.env['product.template']
 		for record in self:
-			product_template_id_name_obj = product_template_table.search([('id', '=', record.product_template_id )])
-			self.product_template_id_name = product_template_id_name_obj.name
+			db_object = product_template_table.search([('id', '=', record.product_template_id )])
+			self.product_template_id_name = db_object.name
 
 	@api.depends('product_template_id')
 	def get_product_attribute_id(self):
 		product_attribute_line_table = self.env['product.attribute.line']
 		for record in self:
-			product_attribute_line_obj = product_attribute_line_table.search([('product_tmpl_id', '=', record.product_template_id)])
-			self.product_attribute_id = product_attribute_line_obj.attribute_id
+			db_object = product_attribute_line_table.search([('product_tmpl_id', '=', record.product_template_id)])
+			self.product_attribute_id = db_object.attribute_id
 
 	@api.depends('product_attribute_id')
 	def get_product_attribute_id_name(self):
 		product_attribute_table =  self.env['product.attribute']
 		for record in self:
-			product_attribute_line_name_obj = product_attribute_table.search([('id', '=', record.product_attribute_id)])
-			self.product_attribute_id_name = product_attribute_line_name_obj.name
+			db_object = product_attribute_table.search([('id', '=', record.product_attribute_id)])
+			self.product_attribute_id_name = db_object.name
 
 	@api.depends('product_attribute_id')
 	def get_product_attribute_value_id(self):
 		product_attribute_value_table = self.env['product.attribute.value']
 		for record in self:
-			product_attribute_value_id_obj = product_attribute_value_table.search([('id', '=', record.product_attribute_id)])
-			self.product_attribute_value_id = product_attribute_value_id_obj.id
+			db_object = product_attribute_value_table.search([('id', '=', record.product_attribute_id)])
+			self.product_attribute_value_id = db_object.id
 
 	@api.depends('product_attribute_id')
 	def get_product_attribute_value_id_name(self):
 		product_attribute_value_table = self.env['product.attribute.value']
 		for record in self:
-			product_attribute_value_id_obj = product_attribute_value_table.search([('id', '=', record.product_attribute_id)])
-			self.product_attribute_value_id_name  = product_attribute_value_id_obj.name
+			db_object = product_attribute_value_table.search([('id', '=', record.product_attribute_id)])
+			self.product_attribute_value_id_name  = db_object.name
 
+	@api.depends('product_template_id')
+	def get_product_category_id(self):
+		product_template_table = self.env['product.template']
+		for record in self:
+			db_object = product_template_table.search([('id', '=', record.product_template_id)])
+			self.product_category_id = db_object.categ_id
+
+	@api.depends('product_category_id')
+	def get_product_category_id_name(self):
+		product_category_table = self.env['product.category']
+		for record in self:
+			db_object = product_category_table.search([('id', '=', record.product_category_id)])
+			self.product_category_id_name  = db_object.name
 
 	# @api.one
 	# @api.depends('product_attribute_line_id')
