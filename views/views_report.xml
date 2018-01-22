@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id='custreport_current_inventory'>
+        <t t-call='report.html_container'>
+            <t t-foreach="docs" t-as="obj">
+                <t t-call="report.external_layout">
+                    <div class='page'>
+                        <div class='oe_structure' />
+                        <h1> Current Inventory Report </h1>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id='report_today'>
+        <t t-call='report.html_container'>
+            <t t-foreach="docs" t-as="obj">
+                <t t-call="report.external_layout">
+                    <div class='page'>
+                        <div class='oe_structure' />
+                        <h1> Inventory Report </h1>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <report id='current_inventory_report' model='stock.quant' string='Current Inventory Today' report_type='qweb-pdf' name='ilyn_inven_report_v2.custreport_current_inventory' file='custreport_current_inventory'/>
+
+    <report id="partner_xlsx" model="stock.quant" string="Inventory Variant Report" report_type="xlsx" name="ilyn_inven_report_v2.report_today.xls" file="res.partner.xls" attachment_use="False" />
+
+</odoo>

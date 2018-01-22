@@ -3,6 +3,7 @@
       <template id='show_current_stock'>
          <title>Current Inventory</title>
 				<h3> Product List - Current Status of Inventory</h3>
+				<button id='print'> Print Variant Report </button>
 				<table class='table'>
 					<thead>
 						<!-- <th>Test_PTI</th> -->

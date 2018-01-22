@@ -9,13 +9,11 @@ class InventoryReports(models.Model):
 	product_attribute_value_id = fields.Integer(compute='get_product_attribute_value_id', store=True)
 	product_attribute_value_id_name = fields.Char(compute='get_product_attribute_value_id_name', store=True)
 
-	@api.one
+	# @api.one
 	@api.depends('product_id')
 	def get_product_template_id(self):
-		product_product_table = self.env['product.product']
-		for record in self:
-			product_template_id_obj = product_product_table.search([('product_tmpl_id', '=', record.product_id.id )])
-			self.product_template_id = product_template_id_obj.id
+		self.env.cr.execute("SELECT product_tmpl_id FROM product_product WHERE id=%s", [(self.product_id.id)])
+		self.product_template_id = self.env.cr.fetchone()[0]
 	
 	@api.depends('product_template_id')
 	def get_product_template_id_name(self):
