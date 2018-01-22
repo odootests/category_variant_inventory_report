@@ -6,7 +6,7 @@
    'website': "http://www.yourcompanysite.com",
    'category': 'Reports',
    'version': '0.1',
-   'depends': ['website', 'stock'],
+   'depends': ['stock'],
    'application': True,
    'data': ['views/views.xml']
 }
