@@ -40,11 +40,11 @@
 							<td> <t t-esc='current_product.product_id.list_price'/> </td>
 							<td> <t t-esc='current_product.location_id.name'/> </td>
 							<td> <t t-esc='current_product.product_template_id'/> </td>
-							<!-- <td> <t t-esc='current_product.product_template_id_name'/></td>
+							<td> <t t-esc='current_product.product_template_id_name'/></td>
 							<td> <t t-esc='current_product.product_attribute_id'/></td>
 							<td> <t t-esc='current_product.product_attribute_id_name'/></td>
 							<td> <t t-esc='current_product.product_attribute_value_id'/></td>
-							<td> <t t-esc='current_product.product_attribute_value_id_name'/></td> -->
+							<td> <t t-esc='current_product.product_attribute_value_id_name'/></td>
 
 						</tr>
 						<!-- 

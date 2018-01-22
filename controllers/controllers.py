@@ -3,7 +3,7 @@ from odoo import http
 class InventoryReport(http.Controller):
    @http.route('/inventory/current')
    def index(self, **kw):
-      stock_quant = http.request.env['stock.quant']
+      stock_quant = http.request.env['stock.quant.cust']
       current_stock = stock_quant.search([])
       first_record = current_stock[0]
       context = {
