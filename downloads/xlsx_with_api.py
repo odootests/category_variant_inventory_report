@@ -2,7 +2,7 @@ import xlsxwriter
 import xmlrpclib, csv
 
 host = 'http://localhost:8069'
-database = 'invendb11'
+database = 'invendb11_clone'
 username = 'user@test.com'
 password = 'test1234'
 
