@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id='inventory_report_tree_view' model='ir.ui.view'>
+			<field name='name'>inventory_report_tree</field>
+			<field name='model'>stock.quant</field>
+			<!-- <field name="inherit_id" ref="product.product_template_only_form_view"/> -->
+	      <field name='arch' type='xml'>
+	      	<!-- <field name="list_price" position="after">
+	         	<button name="download_xlsx" string="Download" type="object"/> 
+	         </field> -->
+	      </field>
+		</record>
+		<record id='inventory_report_action' model='ir.actions.act_window'>
+			<field name='name'>Current Inventory</field>
+			<field name='res_model'>stock.quant</field>
+			<field name='view_type'>form</field>
+	  		<field name='view_mode'>tree,kanban</field>
+	   </record>
+
+	   <menuitem name='Advanced Reports' id='menuitem_inventory_report_root' parent='stock.menu_stock_root' sequence='31'/>
+	   <menuitem action='inventory_report_action' id='menuitem_current_inventory' parent='menuitem_inventory_report_root' sequence='1'/>
+	</data>
+</odoo>
