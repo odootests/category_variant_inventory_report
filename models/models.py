@@ -19,51 +19,53 @@ class InventoryReports(models.Model):
 	
 	@api.depends('product_template_id')
 	def get_product_template_id_name(self):
-		product_template_table = self.env['product.template']
+		table = self.env['product.template']
 		for record in self:
-			db_object = product_template_table.search([('id', '=', record.product_template_id )])
+			db_object = table.search([('id', '=', record.product_template_id )])
 			self.product_template_id_name = db_object.name
 
 	@api.depends('product_template_id')
 	def get_product_attribute_id(self):
-		product_attribute_line_table = self.env['product.attribute.line']
+		table = self.env['product.attribute.line']
 		for record in self:
-			db_object = product_attribute_line_table.search([('product_tmpl_id', '=', record.product_template_id)])
+			db_object = table.search([('product_tmpl_id', '=', record.product_template_id)])
 			self.product_attribute_id = db_object.attribute_id
 
 	@api.depends('product_attribute_id')
 	def get_product_attribute_id_name(self):
-		product_attribute_table =  self.env['product.attribute']
+		table =  self.env['product.attribute']
 		for record in self:
-			db_object = product_attribute_table.search([('id', '=', record.product_attribute_id)])
+			db_object = table.search([('id', '=', record.product_attribute_id)])
 			self.product_attribute_id_name = db_object.name
 
 	@api.depends('product_attribute_id')
 	def get_product_attribute_value_id(self):
-		product_attribute_value_table = self.env['product.attribute.value']
-		for record in self:
-			db_object = product_attribute_value_table.search([('id', '=', record.product_attribute_id)])
-			self.product_attribute_value_id = db_object.id
+		# table = self.env['product.attribute.value.product.product.rel']
+		# for record in self:
+		# 	db_object = table.search([('product_product_id', '=', record.product_id.id)])
+		# 	self.product_attribute_value_id = db_object.product_attribute_value_id
+		self.env.cr.execute("SELECT product_attribute_value_id FROM product_attribute_value_product_product_rel WHERE product_product_id=%s", [(self.product_id.id)])
+		self.product_attribute_value_id = self.env.cr.fetchone()[0]
 
 	@api.depends('product_attribute_id')
 	def get_product_attribute_value_id_name(self):
-		product_attribute_value_table = self.env['product.attribute.value']
+		table = self.env['product.attribute.value']
 		for record in self:
-			db_object = product_attribute_value_table.search([('id', '=', record.product_attribute_id)])
+			db_object = table.search([('id', '=', record.product_attribute_value_id)])
 			self.product_attribute_value_id_name  = db_object.name
 
 	@api.depends('product_template_id')
 	def get_product_category_id(self):
-		product_template_table = self.env['product.template']
+		table = self.env['product.template']
 		for record in self:
-			db_object = product_template_table.search([('id', '=', record.product_template_id)])
+			db_object = table.search([('id', '=', record.product_template_id)])
 			self.product_category_id = db_object.categ_id
 
 	@api.depends('product_category_id')
 	def get_product_category_id_name(self):
-		product_category_table = self.env['product.category']
+		table = self.env['product.category']
 		for record in self:
-			db_object = product_category_table.search([('id', '=', record.product_category_id)])
+			db_object = table.search([('id', '=', record.product_category_id)])
 			self.product_category_id_name  = db_object.name
 
 	# @api.one
