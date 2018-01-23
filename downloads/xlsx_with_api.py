@@ -22,6 +22,11 @@ for record in (records):
 	if not record['product_template_id'] in prodIdRecords:
 		prodIdRecords.append(record['product_template_id'])
 
+variantIdRecords = []
+for record in (records):
+	if not record['product_attribute_value_id_name'] in variantIdRecords:
+		variantIdRecords.append(record['product_attribute_value_id_name'])
+
 # Formatting expected data 
 expectedOutput = []
 
@@ -34,8 +39,7 @@ for prodId in (prodIdRecords):
 				tempArray.append(record['product_category_id_name'])
 				tempArray.append(record['product_template_id_name'])
 				i+=1
-			tempArray.append(record['product_attribute_id_name'])
-			tempArray.append(record['product_attribute_value_id_name'])
+			# tempArray.append(record['product_attribute_value_id_name'])
 			tempArray.append(record['qty'])
 	expectedOutput.append(tempArray)
 
@@ -51,7 +55,6 @@ worksheet.write(0, 1, 'Product')
 
 inc = 2
 for i in range(0,9):
-	worksheet.write(0, inc, 'Variant')
 	worksheet.write(0, inc + 1, 'Attribute')
 	worksheet.write(0, inc + 2, 'Qty')
 	inc += 3
