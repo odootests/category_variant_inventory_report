@@ -12,7 +12,7 @@ odoo_api = xmlrpclib.ServerProxy('%s/xmlrpc/2/object' %host)
 
 records = odoo_api.execute_kw(database, user_id, password, 'stock.quant', 'search_read', [[]], {'fields':['product_template_id', 'product_template_id_name', 'product_attribute_id','product_attribute_id_name', 'product_category_id', 'product_category_id_name', 'product_attribute_value_id', 'product_attribute_value_id_name', 'qty'] })
 
-workbook = xlsxwriter.Workbook('Current Inventory.xlsx')
+workbook = xlsxwriter.Workbook('CurrentInventory.xlsx')
 worksheet = workbook.add_worksheet()
 
 # Formatting variant data

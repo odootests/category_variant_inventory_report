@@ -40,9 +40,9 @@ for prodId in (prodIdRecords):
 				tempArray.append(record['product_category_id_name'])
 				tempArray.append(record['product_template_id_name'])
 				i+=1
-				for item in variantIdRecords:
-					tempArray.append(item)
-			tempArray.append(record['product_attribute_value_id_name'])
+				# for item in variantIdRecords:
+				# 	tempArray.append(item)
+			# tempArray.append(record['product_attribute_value_id_name'])
 			tempArray.append(record['qty'])
 	expectedOutput.append(tempArray)
 
@@ -56,11 +56,19 @@ col = 0
 worksheet.write(0, 0, 'Category')
 worksheet.write(0, 1, 'Product')
 
-inc = 2
-for i in range(0,9):
-	worksheet.write(0, inc + 1, 'Attribute')
-	worksheet.write(0, inc + 2, 'Qty')
-	inc += 3
+# inc = 2
+# for i in range(0,9):
+# 	worksheet.write(0, inc + 1, 'Attribute')
+# 	worksheet.write(0, inc + 2, 'Qty')
+# 	inc += 3
+
+inc=2
+count = 0
+# for i in range(0, len(variantIdRecords)):
+for item in variantIdRecords:
+	worksheet.write(0, inc+count, item)
+	count+=1
+
 
 # Iterate over the data and write it out row by row.
 for item in (expectedOutput):
