@@ -4,15 +4,26 @@ connection = psycopg2.connect(database="invendb11_clone_2", user = "postgres", p
 print "Connection with DB Established"
 
 cursor = connection.cursor()
-cursor.execute("SELECT product_id, product_template_id, product_template_id_name, product_attribute_id, product_attribute_id_name, product_category_id, product_category_id_name, product_attribute_value_id, product_attribute_value_id_name, actual_qty FROM stock_quant")
-records = cursor.fetchall()
+cursor.execute("SELECT product_id, product_template_id, product_template_name, product_attribute_id, product_attribute_name, product_category_id, product_category_name, product_attribute_value_id, product_attribute_value_name, actual_qty FROM stock_inventory_line")
+records_old = cursor.fetchall()
+# for row in records:
+# 	print row
 print "Fetched Records"
 
-cursor.execute("SELECT currentTable.product_id, currentTable.product_qty FROM (SELECT product_id, MAX(create_date) AS create_date FROM stock_inventory_line GROUP BY product_id) AS newTable INNER JOIN stock_inventory_line AS currentTable ON newTable.product_id = currentTable.product_id AND newTable.create_date = currentTable.create_date;")
-records_extra = cursor.fetchall()
-print records_extra
+cursor.execute('''SELECT 
+	currentTable.product_id, 
+	currentTable.product_template_id, 
+	currentTable.product_template_name, 
+	currentTable.product_attribute_id, 
+	currentTable.product_attribute_name, 
+	currentTable.product_category_id, 
+	currentTable.product_category_name, 
+	currentTable.product_attribute_value_id, 
+	currentTable.product_attribute_value_name, 
+	currentTable.actual_qty FROM
+	(SELECT product_id, MAX(create_date) AS create_date FROM stock_inventory_line GROUP BY product_id) AS newTable INNER JOIN stock_inventory_line AS currentTable ON newTable.product_id = currentTable.product_id AND newTable.create_date = currentTable.create_date ORDER BY product_template_name, product_attribute_value_name;''')
+records = cursor.fetchall()
 
-exit()
 workbook = xlsxwriter.Workbook('CurrentInventory.xlsx')
 worksheet = workbook.add_worksheet()
 print "WorkBook Initialized"
@@ -25,7 +36,7 @@ for record in (records):
 
 variantIdRecords = []
 for record in (records):
-	#record[8] = product_attribute_value_id_name
+	#record[8] = product_attribute_value_name
 	if not record[8] in variantIdRecords:
 		variantIdRecords.append(record[8])
 
@@ -38,9 +49,9 @@ for prodId in (prodIdRecords):
 		#record[1] = product_template_id	
 		if prodId == record[1]:
 			if i == 0:
-				#record[6] = product_category_id_name
+				#record[6] = product_category_name
 				tempArray.append(record[6])
-				#record[2] = product_template_id_name
+				#record[2] = product_template_name
 				tempArray.append(record[2])
 				i+=1
 				# for item in variantIdRecords:

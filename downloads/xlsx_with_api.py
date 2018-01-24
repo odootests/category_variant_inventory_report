@@ -10,7 +10,7 @@ common = xmlrpclib.ServerProxy('%s/xmlrpc/2/common' %host)
 user_id = common.authenticate(database, username, password, {})
 odoo_api = xmlrpclib.ServerProxy('%s/xmlrpc/2/object' %host)
 
-records = odoo_api.execute_kw(database, user_id, password, 'stock.quant', 'search_read', [[]], {'fields':['product_template_id', 'product_template_id_name', 'product_attribute_id','product_attribute_id_name', 'product_category_id', 'product_category_id_name', 'product_attribute_value_id', 'product_attribute_value_id_name', 'qty'] })
+records = odoo_api.execute_kw(database, user_id, password, 'stock.quant', 'search_read', [[]], {'fields':['product_template_id', 'product_template_name', 'product_attribute_id','product_attribute_name', 'product_category_id', 'product_category_name', 'product_attribute_value_id', 'product_attribute_value_name', 'qty'] })
 
 workbook = xlsxwriter.Workbook('CurrentInventory.xlsx')
 worksheet = workbook.add_worksheet()
@@ -24,8 +24,8 @@ for record in (records):
 
 variantIdRecords = []
 for record in (records):
-	if not record['product_attribute_value_id_name'] in variantIdRecords:
-		variantIdRecords.append(record['product_attribute_value_id_name'])
+	if not record['product_attribute_value_name'] in variantIdRecords:
+		variantIdRecords.append(record['product_attribute_value_name'])
 
 # Formatting expected data 
 expectedOutput = []
@@ -36,8 +36,8 @@ for prodId in (prodIdRecords):
 	for record in (records):	
 		if prodId == record['product_template_id']:
 			if i == 0:
-				tempArray.append(record['product_category_id_name'])
-				tempArray.append(record['product_template_id_name'])
+				tempArray.append(record['product_category_name'])
+				tempArray.append(record['product_template_name'])
 				i+=1
 			# tempArray.append(record['product_attribute_value_id_name'])
 			tempArray.append(record['qty'])
