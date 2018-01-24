@@ -1,7 +1,4 @@
 from odoo import api, models, fields, http
-from openerp.addons.report_xlsx.report.report_xlsx import ReportXlsx
-import xlsxwriter
-import xmlrpclib
 
 class InventoryReports(models.Model):
 	_inherit='stock.quant'
@@ -44,10 +41,6 @@ class InventoryReports(models.Model):
 
 	@api.depends('product_attribute_id')
 	def get_product_attribute_value_id(self):
-		# table = self.env['product.attribute.value.product.product.rel']
-		# for record in self:
-		# 	db_object = table.search([('product_product_id', '=', record.product_id.id)])
-		# 	self.product_attribute_value_id = db_object.product_attribute_value_id
 		self.env.cr.execute("SELECT product_attribute_value_id FROM product_attribute_value_product_product_rel WHERE product_product_id=%s", [(self.product_id.id)])
 		self.product_attribute_value_id = self.env.cr.fetchone()[0]
 
@@ -79,23 +72,3 @@ class InventoryReports(models.Model):
 		for record in results:
 			if record[0] == self.product_id.id:
 				self.actual_qty = record[1]
-
-	# @api.one
-	# @api.depends('product_attribute_line_id')
-	# def get_product_attribute_value(self):
-	# 	product_attribute_val = self.env['product.attribute.value']
-	#    for record in self:
-	#       the_product_attribute_line_val = product_attribute_val.search([('product_tmpl_id','=', 2)])
-	#       self.product_attribute_line_id = the_product_attribute_line_id.id
-
-
-
-	# warehouse_id = fields.Integer(compute='get_warehouse_id')
-	
-	# def get_warehouse_id(self):
-	#    stock_warehouse = self.env['stock.warehouse']
-	#    for record in self:
-	#       the_warehouse_id = stock_warehouse.search([('lot_stock_id', '=', 15)])  
-	#       for whid in the_warehouse_id:
-	#          self.warehouse_id = the_warehouse_id.id
-	#       #self.warehouse_name = the_warehouse_id.name
