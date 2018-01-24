@@ -1,5 +1,5 @@
 -- set new column to null
-UPDATE public.stock_quant SET product_template_id=null, product_template_id_name=null, product_attribute_id=null, product_attribute_id_name=null, product_category_id=null, product_category_id_name=null, product_attribute_value_id=null, product_attribute_value_id_name=null ;
+UPDATE public.stock_quant SET product_template_id=null, product_template_id_name=null, product_attribute_id=null, product_attribute_id_name=null, product_category_id=null, product_category_id_name=null, product_attribute_value_id=null, product_attribute_value_id_name=null, actual_qty=null ;
 
 -- Update product template ID 
 UPDATE public.stock_quant SET product_template_id=(SELECT product_tmpl_id FROM product_product WHERE id=(product_id)) WHERE product_template_id is null;
@@ -24,3 +24,6 @@ UPDATE public.stock_quant SET product_attribute_value_id=(SELECT product_attribu
 
 -- Update Product Attribute Value Name
 UPDATE public.stock_quant SET product_attribute_value_id_name=(SELECT name FROM product_attribute_value WHERE id=(product_attribute_value_id)) WHERE product_attribute_value_id_name is null;
+
+-- Update Product Actual Quantity 
+UPDATE public.stock_quant SET actual_qty=(select currentTable.product_qty from (select product_id, MAX(create_date) as create_date from stock_inventory_line group by product_id) as newTable Inner JOIN stock_inventory_line as currentTable ON newTable.product_id = currentTable.product_id AND newTable.create_date = currentTable.create_date WHERE newTable.product_id =(stock_quant.product_id)) where actual_qty is null;

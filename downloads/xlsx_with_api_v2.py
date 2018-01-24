@@ -2,7 +2,7 @@ import xlsxwriter
 import xmlrpclib, csv
 
 host = 'http://localhost:8069'
-database = 'invendb11_clone'
+database = 'invendb11_clone_2'
 username = 'user@test.com'
 password = 'test1234'
 
@@ -10,7 +10,7 @@ common = xmlrpclib.ServerProxy('%s/xmlrpc/2/common' %host)
 user_id = common.authenticate(database, username, password, {})
 odoo_api = xmlrpclib.ServerProxy('%s/xmlrpc/2/object' %host)
 
-records = odoo_api.execute_kw(database, user_id, password, 'stock.quant', 'search_read', [[]], {'fields':['product_template_id', 'product_template_id_name', 'product_attribute_id','product_attribute_id_name', 'product_category_id', 'product_category_id_name', 'product_attribute_value_id', 'product_attribute_value_id_name', 'qty'] })
+records = odoo_api.execute_kw(database, user_id, password, 'stock.quant', 'search_read', [[]], {'fields':['product_template_id', 'product_template_id_name', 'product_attribute_id','product_attribute_id_name', 'product_category_id', 'product_category_id_name', 'product_attribute_value_id', 'product_attribute_value_id_name', 'actual_qty'] })
 
 workbook = xlsxwriter.Workbook('CurrentInventory.xlsx')
 worksheet = workbook.add_worksheet()
@@ -27,7 +27,6 @@ for record in (records):
 	if not record['product_attribute_value_id_name'] in variantIdRecords:
 		variantIdRecords.append(record['product_attribute_value_id_name'])
 
-
 # Formatting expected data 
 expectedOutput = []
 
@@ -43,7 +42,7 @@ for prodId in (prodIdRecords):
 				# for item in variantIdRecords:
 				# 	tempArray.append(item)
 			# tempArray.append(record['product_attribute_value_id_name'])
-			tempArray.append(record['qty'])
+			tempArray.append(record['actual_qty'])
 	expectedOutput.append(tempArray)
 
 print expectedOutput
