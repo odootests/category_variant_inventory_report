@@ -4,11 +4,6 @@ connection = psycopg2.connect(database="invendb11_clone_2", user = "postgres", p
 print "Connection with DB Established"
 
 cursor = connection.cursor()
-cursor.execute("SELECT product_id, product_template_id, product_template_name, product_attribute_id, product_attribute_name, product_category_id, product_category_name, product_attribute_value_id, product_attribute_value_name, actual_qty FROM stock_inventory_line")
-records_old = cursor.fetchall()
-# for row in records:
-# 	print row
-print "Fetched Records"
 
 cursor.execute('''SELECT 
 	currentTable.product_id, 
@@ -23,6 +18,10 @@ cursor.execute('''SELECT
 	currentTable.actual_qty FROM
 	(SELECT product_id, MAX(create_date) AS create_date FROM stock_inventory_line GROUP BY product_id) AS newTable INNER JOIN stock_inventory_line AS currentTable ON newTable.product_id = currentTable.product_id AND newTable.create_date = currentTable.create_date ORDER BY product_template_name, product_attribute_value_name;''')
 records = cursor.fetchall()
+print "Fetched Records"
+
+for row in records:
+	print row
 
 workbook = xlsxwriter.Workbook('CurrentInventory.xlsx')
 worksheet = workbook.add_worksheet()
@@ -33,12 +32,15 @@ for record in (records):
 	#record[1] = product_template_id
 	if not record[1] in prodIdRecords:
 		prodIdRecords.append(record[1])
+print "Indexing Product IDs"
 
 variantIdRecords = []
 for record in (records):
 	#record[8] = product_attribute_value_name
 	if not record[8] in variantIdRecords:
 		variantIdRecords.append(record[8])
+
+print "Indexing Variant IDs"
 
 expectedOutput = []
 
@@ -59,7 +61,7 @@ for prodId in (prodIdRecords):
 			tempArray.append(record[9])
 	expectedOutput.append(tempArray)
 
-print expectedOutput
+#print expectedOutput
 
 row = 1
 col = 0
@@ -77,13 +79,15 @@ for item in variantIdRecords:
 # Iterate over the data and write it out row by row.
 for item in (expectedOutput):
 	counter = 0
+	print item
 	for i in range(0,len(item)):
+		print item[i]
 		worksheet.write(row, counter, item[counter])
 		counter += 1
 	row += 1
 
 workbook.close()
-print "Workbook Complete"
+print "Closing Workbook"
 
 connection.close()
 print "Connection Closed"
