@@ -1,4 +1,4 @@
-from odoo import api, models, fields, http
+from odoo import api, models, fields
 
 class InventoryReports(models.Model):
 	_inherit='stock.inventory.line'

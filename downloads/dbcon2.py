@@ -32,6 +32,7 @@ for record in (records):
 	#record[1] = product_template_id
 	if not record[1] in prodIdRecords:
 		prodIdRecords.append(record[1])
+
 print "Indexing Product IDs"
 print prodIdRecords
 
@@ -44,42 +45,58 @@ for record in (records):
 print "Indexing Variant ID Names"
 print variantNameRecords
 
-print records
-
 expectedOutput = []
 
 for prodId in (prodIdRecords):
 	tempArray = []
 	i = 0
+	for variantName in variantNameRecords:
+		j=0
+		for record in (records):
+			#record[1] = product_template_id	
+			if prodId == record[1]:
+				if i == 0:
+					#record[6] = product_category_name
+					tempArray.append(record[6])
+					#record[2] = product_template_name
+					tempArray.append(record[2])
+					i+=1
+			
+				if variantName == record[8]:
+					#record[9] = actual_qty
+					tempArray.append(record[9])
+				else:
+					if j==0:
+						# tempArray.append('X')
+						j+=1
+	expectedOutput.append(tempArray)
 
+expectedOutput2 = []
+
+for prodId in (prodIdRecords):
+	tempArray2 = []
+	i = 0
 	for record in (records):
-
 		#record[1] = product_template_id	
 		if prodId == record[1]:
 			if i == 0:
 				#record[6] = product_category_name
-				tempArray.append(record[6])
+				tempArray2.append(record[6])
 				#record[2] = product_template_name
-				tempArray.append(record[2])
+				tempArray2.append(record[2])
 				i+=1
+			for name in variantNameRecords:
+				if not record[8] == name:
+					tempArray2.append(0)
+					continue
+				else:
+					tempArray2.append(record[9])
+	expectedOutput2.append(tempArray2)
 
-			findVariant=False
-			j=0
-			for variantName in (variantNameRecords):
-				#record[8] = product_attribute_value_name
-				if record[8] == variantName:
-					#record[9] = actual_qty
-					tempArray.append(record[9])
-					findVariant = True		
-				
-				if findVariant == False and j == len(variantNameRecords)-1:
-					tempArray.append('0')
+print "Data after Loop"
+print expectedOutput2
 
-				j+=1
-			
-	expectedOutput.append(tempArray)
-
-print expectedOutput
+# print expectedOutput
 
 print "Start Arrangement"
 
@@ -96,9 +113,10 @@ for item in variantNameRecords:
 row = 1
 col = 0
 
-for item in (expectedOutput):
+# for item in (expectedOutput):
+for item in (expectedOutput2):
 	counter = 0
-	print item[1]
+	# print item[1]
 	for i in range(0,len(item)):
 		# print item[i]
 		worksheet.write(row, counter, item[counter])
