@@ -36,60 +36,67 @@ for record in (records):
 print "Indexing Product IDs"
 print prodIdRecords
 
-variantIdRecords = []
-for record in (records):
-	#record[7] = product_attribute_value_name
-	if not record[7] in variantIdRecords:
-		variantIdRecords.append(record[7])
-
 variantNameRecords = []
 for record in (records):
-	#record[7] = product_attribute_value_name
+	#record[8] = product_attribute_value_name
 	if not record[8] in variantNameRecords:
 		variantNameRecords.append(record[8])
 
 print "Indexing Variant ID Names"
-print variantIdRecords
+print variantNameRecords
 
 expectedOutput = []
 
-for prodId in (prodIdRecords):
-	tempArray = []
-	i = 0
+# for prodId in (prodIdRecords):
+# 	tempArray = []
+# 	i = 0
+# 	for variantName in variantNameRecords:
+# 		j=0
+# 		for record in (records):
+# 			#record[1] = product_template_id	
+# 			if prodId == record[1]:
+# 				if i == 0:
+# 					#record[6] = product_category_name
+# 					tempArray.append(record[6])
+# 					#record[2] = product_template_name
+# 					tempArray.append(record[2])
+# 					i+=1
+			
+# 				if variantName == record[8]:
+# 					#record[9] = actual_qty
+# 					tempArray.append(record[9])
+# 				else:
+# 					if j==0:
+# 						# tempArray.append('X')
+# 						j+=1
+# 	expectedOutput.append(tempArray)
 
+# expectedOutput2 = []
+
+for prodId in (prodIdRecords):
+	tempArray2 = []
+	i = 0
 	for record in (records):
 		#record[1] = product_template_id	
 		if prodId == record[1]:
 			if i == 0:
 				#record[6] = product_category_name
-				tempArray.append(record[6])
+				tempArray2.append(record[6])
 				#record[2] = product_template_name
-				tempArray.append(record[2])
+				tempArray2.append(record[2])
 				i+=1
-		
-	for variantId in (variantIdRecords):
-		findVariant = False	
-		tempVariantIdRecords = []		
-		counter=0	
-		for record in (records):
-			#record[1] = product_template_id	
-			if prodId == record[1] and not variantId in tempVariantIdRecords and variantId == record[7]:
-				#record[9] = actual_qty
-				tempArray.append(record[9])
-				tempVariantIdRecords.append(variantId)
-				findVariant = True
-			counter+=1	
-		print counter
-		if findVariant == False and counter == len(records):
-			tempArray.append('0')
 			
-	expectedOutput.append(tempArray)
+			tempArray2.append(0)
+					
+	expectedOutput2.append(tempArray2)
 
 print "Data after Loop"
-print expectedOutput
+print expectedOutput2
 
+# print expectedOutput
 
 print "Start Arrangement"
+
 worksheet.write(0, 0, 'Category')
 worksheet.write(0, 1, 'Product')
 
@@ -104,7 +111,7 @@ row = 1
 col = 0
 
 # for item in (expectedOutput):
-for item in (expectedOutput):
+for item in (expectedOutput2):
 	counter = 0
 	# print item[1]
 	for i in range(0,len(item)):
