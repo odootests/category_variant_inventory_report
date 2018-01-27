@@ -1,5 +1,6 @@
 from odoo import http
 import xlsxwriter, datetime
+from time import strftime, gmtime
 
 class InventoryReport(http.Controller):
 	@http.route('/inventory/current', website='True')
@@ -79,7 +80,8 @@ class InventoryReport(http.Controller):
 					
 			expectedOutput.append(tempArray)
 
-		current_timestamp = datetime.datetime.now()
+		current_date = datetime.datetime.now()
+		current_date = strftime("%a, %d-%m-%Y")
 
 		workbook = xlsxwriter.Workbook('CurrentInventory.xlsx')
 		worksheet = workbook.add_worksheet()
@@ -109,7 +111,7 @@ class InventoryReport(http.Controller):
 		workbook.close()
 
 		context = {
-			'current_timestamp': current_timestamp,
+			'current_date': current_date,
 			'variantNameRecords': variantNameRecords,
 			'expectedOutput': expectedOutput,
 		}

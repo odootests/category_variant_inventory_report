@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-   <data>
-      <template id='show_current_stock'>
-      	<t name='Current Inventory' >
-	      	<t t-call='website.layout'>
+	<data>
+		<template id='show_current_stock'>
+			<t name='Current Inventory' >
+				<t t-call='website.layout'>
 					<t t-set='title'>Current Inventory Raw</t>
 					<div class='oe_structure'>
 						<div class='container'>
-         				<h3> Product List - Current Status of Inventory</h3>			 
+							<h3> Product List - Current Status of Inventory</h3>			 
 							<table >
 								<thead>
 									<th>#</th>
@@ -44,12 +44,15 @@
 		</template>
 
 		<template name='Current Inventory' id='inventory_current_stock'>
-      	<t t-call='website.layout'>
+			<t t-call='website.layout'>
 				<t t-set='title'>Current Inventory</t>
 				<div class='oe_structure'>
 					<div class='container'>
-      				<h3 class='mt24 mb32'> Inventory at <strong> <t t-esc='current_timestamp' /></strong> </h3>			 
-						<table class='table table-hover table-bordered'>
+						<link rel='stylesheet' href='https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css' />
+						<script src='//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js'></script>
+						<h3 class='mt24 mb32'> Inventory at 
+							<strong>	<t t-esc='current_date' /> <t t-esc='current_time' /></strong> </h3>			 
+						<table class='table table-hover table-bordered' id='current_inventory_table'>
 							<thead>
 								<th>#</th>
 								<th>Category</th>
@@ -69,6 +72,17 @@
 							</tbody>
 						</table>
 					</div>
+					<script type='text/javascript'>
+						$(document).ready(function(){
+   						$('#current_inventory_table').DataTable( {
+   							dom: 'Bfrtip',
+    							buttons: [
+        							'copy', 'excel', 'pdf'
+    							]
+							} );
+						});
+
+					</script>
 				</div>
 			</t>
 		</template>
