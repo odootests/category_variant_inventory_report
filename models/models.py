@@ -17,7 +17,7 @@ class InventoryReports(models.Model):
 	def get_product_template_id(self):
 		table = self.env['product.product']
 		for record in self:
-			db_object = table.search([('id', '=', record.product_id )])
+			db_object = table.search([('id', '=', record.product_id.id )])
 			self.product_template_id = db_object.product_tmpl_id
 		# self.env.cr.execute("SELECT product_tmpl_id FROM product_product WHERE id=%s", [(self.product_id.id)])
 		# self.product_template_id = self.env.cr.fetchone()[0]
