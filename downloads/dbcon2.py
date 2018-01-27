@@ -42,14 +42,17 @@ for record in (records):
 	if not record[7] in variantIdRecords:
 		variantIdRecords.append(record[7])
 
+print "Indexing Variant IDs"
+print variantIdRecords
+
 variantNameRecords = []
 for record in (records):
 	#record[7] = product_attribute_value_name
 	if not record[8] in variantNameRecords:
 		variantNameRecords.append(record[8])
 
-print "Indexing Variant ID Names"
-print variantIdRecords
+print "Indexing Variant Names"
+print variantNameRecords
 
 expectedOutput = []
 
