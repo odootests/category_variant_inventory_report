@@ -3,33 +3,6 @@ import datetime
 from time import strftime, gmtime
 
 class InventoryReport(http.Controller):
-	@http.route('/inventory/test')
-	def test(self, **kw):
-		table = http.request.env['product.category']
-		db_object = table.search([('id', '=', 6)])
-		num_rows = table.search_count([])
-		temp_cat_name = []
-		for i in range(0,num_rows):
-			if db_object.parent_id:
-				temp_cat_name.append(db_object.name)
-				new_catID = db_object.parent_id.id
-				db_object = table.search([('id', '=', new_catID)])
-			if not db_object.parent_id:
-				temp_cat_name.append(db_object.name)
-				break
-		temp_cat_name.reverse()
-		temp_cat_name = ' / '.join(temp_cat_name)
-
-		product_category_fullname = temp_cat_name
-		num_rows = table.search_count([])
-		context = {
-			# 'temp_cat_name':temp_cat_name,
-			'product_category_fullname':product_category_fullname,
-			'num_rows':num_rows
-		}
-		return http.request.render('ilyn_inven_report_v2.test', context)
-
-
 	@http.route('/inventory/current/raw', website='True')
 	def index(self, **kw):
 		stock_quant = http.request.env['stock.inventory.line']

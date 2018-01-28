@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 	<data>
-		<template id='test'>
-			<p> Num Rows: <t t-esc='num_rows' /> </p>
-			<p> Prod Cat FNAME: <t t-esc='product_category_fullname' /> </p>
-			<!-- <p> Prod Cat Partials: 
-				<t t-foreach='temp_cat_name' t-as='partial'>
-					<span t-esc='partial'/>
-				</t>
-			</p> -->
-		</template>
-
 		<template id='show_current_stock'>
 			<t name='Current Inventory' >
 				<t t-call='website.layout'>
