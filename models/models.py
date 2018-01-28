@@ -8,6 +8,7 @@ class InventoryReports(models.Model):
 	product_attribute_name = fields.Char(compute='get_product_attribute_name', store=True)
 	product_category_id = fields.Integer(compute='get_product_category_id', store=True)
 	product_category_name = fields.Char(compute='get_product_category_name', store=True)
+	product_category_fullname = fields.Char(compute='get_product_category_fullname', store=True)
 	product_attribute_value_id = fields.Integer(compute='get_product_attribute_value_id', store=True)
 	product_attribute_value_name = fields.Char(compute='get_product_attribute_value_name', store=True)
 	actual_qty = fields.Integer(compute='calc_product_actual_qty', store=True)
@@ -69,6 +70,28 @@ class InventoryReports(models.Model):
 		for record in self:
 			db_object = table.search([('id', '=', record.product_category_id)])
 			self.product_category_name  = db_object.name
+
+	@api.depends('product_category_id')
+	def get_product_category_fullname(self):
+		table = self.env['product.category']
+		for record in self:
+			db_object = table.search([('id', '=', record.product_category_id)])
+			num_rows = table.search_count([])
+			temp_cat_name = []
+			for i in range(0,num_rows):
+				if db_object.parent_id:
+					temp_cat_name.append(db_object.name)
+					# temp_cat_name.append("/")
+					new_catID = db_object.parent_id.id
+					db_object = table.search([('id', '=', new_catID)])
+				if not db_object.parent_id:
+					temp_cat_name.append(db_object.name)
+					break
+			temp_cat_name.reverse()
+			temp_cat_name = ' / '.join(temp_cat_name)
+			
+			self.product_category_fullname = temp_cat_name
+	
 
 	@api.depends('product_id')
 	def calc_product_actual_qty(self):

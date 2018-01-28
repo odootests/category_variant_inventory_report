@@ -1,13 +1,41 @@
 from odoo import http
-import xlsxwriter, datetime
+import datetime
 from time import strftime, gmtime
 
 class InventoryReport(http.Controller):
+	@http.route('/inventory/test')
+	def test(self, **kw):
+		table = http.request.env['product.category']
+		db_object = table.search([('id', '=', 6)])
+		num_rows = table.search_count([])
+		temp_cat_name = []
+		for i in range(0,num_rows):
+			if db_object.parent_id:
+				temp_cat_name.append(db_object.name)
+				new_catID = db_object.parent_id.id
+				db_object = table.search([('id', '=', new_catID)])
+			if not db_object.parent_id:
+				temp_cat_name.append(db_object.name)
+				break
+		temp_cat_name.reverse()
+		temp_cat_name = ' / '.join(temp_cat_name)
+
+		product_category_fullname = temp_cat_name
+		num_rows = table.search_count([])
+		context = {
+			# 'temp_cat_name':temp_cat_name,
+			'product_category_fullname':product_category_fullname,
+			'num_rows':num_rows
+		}
+		return http.request.render('ilyn_inven_report_v2.test', context)
+
+
 	@http.route('/inventory/current/raw', website='True')
 	def index(self, **kw):
 		stock_quant = http.request.env['stock.inventory.line']
 		current_stock = stock_quant.search([])
 		context = {
+			'real_date' : datetime.datetime.now(),
 			'current_stock': current_stock
 		}
 		return http.request.render('ilyn_inven_report_v2.show_current_stock', context)
@@ -100,33 +128,6 @@ class InventoryReport(http.Controller):
 
 		current_date = datetime.datetime.now()
 		current_date = strftime("%a, %d-%m-%Y")
-
-		workbook = xlsxwriter.Workbook('CurrentInventory.xlsx')
-		worksheet = workbook.add_worksheet()
-		
-		worksheet.write(0, 0, 'Category')
-		worksheet.write(0, 1, 'Product')
-
-		inc=2
-		count = 0
-
-		for item in variantNameRecords:
-			worksheet.write(0, inc+count, item)
-			count+=1
-
-		row = 1
-		col = 0
-
-		for item in (expectedOutput):
-			counter = 0
-			# print item[1]
-			for i in range(0,len(item)):
-				# print item[i]
-				worksheet.write(row, counter, item[counter])
-				counter += 1
-			row += 1
-
-		workbook.close()
 
 		context = {
 			'current_date': current_date,

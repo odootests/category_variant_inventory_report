@@ -1,5 +1,5 @@
 -- set new column values to null
-UPDATE public.stock_inventory_line SET product_template_id=null, product_template_name=null, product_attribute_id=null, product_attribute_name=null, product_category_id=null, product_category_name=null, product_attribute_value_id=null, product_attribute_value_name=null, actual_qty=null ;
+UPDATE public.stock_inventory_line SET product_template_id=null, product_template_name=null, product_attribute_id=null, product_attribute_name=null, product_category_id=null, product_category_name=null, product_category_fullname=null, product_attribute_value_id=null, product_attribute_value_name=null, actual_qty=null;
 
 -- Update product template ID 
 UPDATE public.stock_inventory_line SET product_template_id=(SELECT product_tmpl_id FROM product_product WHERE id=(product_id)) WHERE product_template_id is null;
