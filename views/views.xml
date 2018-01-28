@@ -15,8 +15,9 @@
 									<th>CatID</th>
 									<th>AttrID</th>
 									<th>AttrValID</th>
+									<th>FullCateg </th>
 									<th>Product </th>
-									<th>Catgeory </th>
+									<th>Category </th>
 									<th>Attribute </th>
 									<th>Attr.Value </th>
 									<th>Actual Qty</th>
@@ -29,6 +30,7 @@
 										<td> <t t-esc='current_product.product_category_id'/></td>
 										<td> <t t-esc='current_product.product_attribute_id'/></td>
 										<td> <t t-esc='current_product.product_attribute_value_id'/></td>
+										<td> <t t-esc='current_product.product_category_fullname'/></td>
 										<td> <strong> <t t-esc='current_product.product_template_name'/> </strong> </td> 
 										<td> <t t-esc='current_product.product_category_name'/></td>
 										<td> <t t-esc='current_product.product_attribute_name'/></td>
@@ -47,7 +49,7 @@
 			<t t-call='website.layout'>
 				<t t-set='title'>Current Inventory</t>
 				<div class='oe_structure'>
-					<div class='container'>
+					<div class='container-fluid'>
 						
 						<link rel='stylesheet' href='https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css' />
             		<script type="text/javascript" src='https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js'></script>
@@ -57,7 +59,6 @@
             		<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js'></script>
             		<script type="text/javascript" src='https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js'></script>
 
-
 						<h3 class='mt24 mb32'> Inventory at 
 							<strong>	<t t-esc='current_date' /> </strong> </h3>			 
 						<table class='table table-hover table-bordered' id='current_inventory_table'>
@@ -65,6 +66,7 @@
 								<th>#</th>
 								<th>Category</th>
 								<th>Product</th>
+								<!-- <th>Category</th> -->
 								<t t-foreach='variantNameRecords' t-as='variantName'>
 									<th> <t t-esc='variantName' /> </th>
 								</t>
@@ -88,9 +90,8 @@
         							'excelHtml5', 'pdfHtml5', 'csvHtml5'
     							]
 							});
-							$('.dt-buttons button').addClass('btn btn-default');
+							$('.dt-buttons button').addClass('btn btn-default').css({'border-radius': '0'});
 						});
-
 					</script>
 				</div>
 			</t>

@@ -20,9 +20,6 @@ class InventoryReports(models.Model):
 		for record in self:
 			db_object = table.search([('id', '=', record.product_id.id )])
 			self.product_template_id = db_object.product_tmpl_id
-		# self.env.cr.execute("SELECT product_tmpl_id FROM product_product WHERE id=%s", [(self.product_id.id)])
-		# self.product_template_id = self.env.cr.fetchone()[0]
-
 	
 	@api.depends('product_template_id')
 	def get_product_template_name(self):
@@ -81,7 +78,6 @@ class InventoryReports(models.Model):
 			for i in range(0,num_rows):
 				if db_object.parent_id:
 					temp_cat_name.append(db_object.name)
-					# temp_cat_name.append("/")
 					new_catID = db_object.parent_id.id
 					db_object = table.search([('id', '=', new_catID)])
 				if not db_object.parent_id:
@@ -89,10 +85,8 @@ class InventoryReports(models.Model):
 					break
 			temp_cat_name.reverse()
 			temp_cat_name = ' / '.join(temp_cat_name)
-			
 			self.product_category_fullname = temp_cat_name
 	
-
 	@api.depends('product_id')
 	def calc_product_actual_qty(self):
 		self.env.cr.execute("SELECT currentTable.product_id, currentTable.product_qty, newTable.create_date from (SELECT product_id, MAX(create_date) AS create_date FROM stock_inventory_line GROUP BY product_id) AS newTable INNER JOIN stock_inventory_line AS currentTable ON newTable.product_id = currentTable.product_id AND newTable.create_date = currentTable.create_date;")
