@@ -13,14 +13,15 @@ class InventoryReports(models.Model):
 	product_attribute_value_name = fields.Char(compute='get_product_attribute_value_name', store=True)
 	actual_qty = fields.Integer(compute='calc_product_actual_qty', store=True)
 
-	# @api.one
+	@api.one
 	@api.depends('product_id')
 	def get_product_template_id(self):
 		table = self.env['product.product']
 		for record in self:
-			db_object = table.search([('id', '=', record.product_id)])
+			db_object = table.search([('id', '=', record.product_id.id)])
 			self.product_template_id = db_object.product_tmpl_id
 
+	@api.one
 	@api.depends('product_template_id')
 	def get_product_template_name(self):
 		table = self.env['product.template']
@@ -28,6 +29,7 @@ class InventoryReports(models.Model):
 			db_object = table.search([('id', '=', record.product_template_id )])
 			self.product_template_name = db_object.name
 
+	@api.one
 	@api.depends('product_template_id')
 	def get_product_attribute_id(self):
 		table = self.env['product.attribute.line']
@@ -35,6 +37,7 @@ class InventoryReports(models.Model):
 			db_object = table.search([('product_tmpl_id', '=', record.product_template_id)])
 			self.product_attribute_id = db_object.attribute_id
 
+	@api.one
 	@api.depends('product_attribute_id')
 	def get_product_attribute_name(self):
 		table =  self.env['product.attribute']
@@ -42,11 +45,13 @@ class InventoryReports(models.Model):
 			db_object = table.search([('id', '=', record.product_attribute_id)])
 			self.product_attribute_name = db_object.name
 
+	@api.one
 	@api.depends('product_id')
 	def get_product_attribute_value_id(self):
-		self.env.cr.execute("SELECT product_attribute_value_id FROM product_attribute_value_product_product_rel WHERE product_product_id=%s", [(self.product_id)])
+		self.env.cr.execute("SELECT product_attribute_value_id FROM product_attribute_value_product_product_rel WHERE product_product_id=%s", [(self.product_id.id)])
 		self.product_attribute_value_id = self.env.cr.fetchone()[0]
 
+	@api.one
 	@api.depends('product_attribute_id')
 	def get_product_attribute_value_name(self):
 		table = self.env['product.attribute.value']
@@ -54,6 +59,7 @@ class InventoryReports(models.Model):
 			db_object = table.search([('id', '=', record.product_attribute_value_id)])
 			self.product_attribute_value_name  = db_object.name
 
+	@api.one
 	@api.depends('product_template_id')
 	def get_product_category_id(self):
 		table = self.env['product.template']
@@ -61,6 +67,7 @@ class InventoryReports(models.Model):
 			db_object = table.search([('id', '=', record.product_template_id)])
 			self.product_category_id = db_object.categ_id
 
+	@api.one
 	@api.depends('product_category_id')
 	def get_product_category_name(self):
 		table = self.env['product.category']
@@ -87,10 +94,11 @@ class InventoryReports(models.Model):
 			temp_cat_name = ' / '.join(temp_cat_name)
 			self.product_category_fullname = temp_cat_name
 	
+	@api.one
 	@api.depends('product_id')
 	def calc_product_actual_qty(self):
 		self.env.cr.execute("SELECT currentTable.product_id, currentTable.product_qty from (SELECT product_id, MAX(create_date) AS create_date FROM stock_inventory_line GROUP BY product_id) AS newTable INNER JOIN stock_inventory_line AS currentTable ON newTable.product_id = currentTable.product_id AND newTable.create_date = currentTable.create_date;")
 		results = self.env.cr.fetchall()
 		for record in results:
-			if record[0] == self.product_id:
+			if record[0] == self.product_id.id:
 				self.actual_qty = record[1]
