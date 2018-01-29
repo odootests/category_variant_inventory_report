@@ -11,7 +11,7 @@ class InventoryReport(http.Controller):
 			'real_date' : datetime.datetime.now(),
 			'current_stock': current_stock
 		}
-		return http.request.render('ilyn_inven_report_v2.show_current_stock', context)
+		return http.request.render('category_variant_inventory_report.show_current_stock', context)
 
 	@http.route('/inventory/current/', auth='user', website='True')
 	def current_inventory(self, **kw):
@@ -120,4 +120,4 @@ class InventoryReport(http.Controller):
 			'variantNameRecords': variantNameRecords,
 			'expectedOutput': expectedOutput,
 		}
-		return http.request.render('ilyn_inven_report_v2.inventory_current_stock', context)
+		return http.request.render('category_variant_inventory_report.inventory_current_stock', context)
