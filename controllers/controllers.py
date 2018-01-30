@@ -13,25 +13,52 @@ class InventoryReport(http.Controller):
 		}
 		return http.request.render('category_variant_inventory_report.show_current_stock', context)
 
-	@http.route('/inventory/current/', auth='user', website='True')
+	@http.route('/inventory/current/', auth='public', website='True')
 	def current_inventory(self, **kw):
-		http.request.env.cr.execute("UPDATE public.stock_inventory_line SET product_template_id=(SELECT product_tmpl_id FROM product_product WHERE id=(product_id)) WHERE product_template_id is null;")
+		http.request.env.cr.execute("SELECT * from stock_inventory_line WHERE product_template_id is NULL")
+		null_prod_tmpl_id_recs = http.request.env.cr.dictfetchall()
+		if null_prod_tmpl_id_recs:
+			http.request.env.cr.execute("UPDATE public.stock_inventory_line SET product_template_id=(SELECT product_tmpl_id FROM product_product WHERE id=stock_inventory_line.product_id) WHERE product_template_id is null;")
 
-		http.request.env.cr.execute("UPDATE public.stock_inventory_line SET product_template_name=(SELECT name FROM product_template WHERE id=(product_template_id)) WHERE product_template_name is null;")
+		http.request.env.cr.execute("SELECT * from stock_inventory_line WHERE product_template_name is NULL")
+		null_prod_tmpl_name_recs = http.request.env.cr.dictfetchall()
+		if null_prod_tmpl_name_recs:
+			http.request.env.cr.execute("UPDATE public.stock_inventory_line SET product_template_name=(SELECT name FROM product_template WHERE id=(stock_inventory_line.product_template_id)) WHERE product_template_name is null;")
 
-		http.request.env.cr.execute("UPDATE public.stock_inventory_line SET product_attribute_id=(SELECT attribute_id FROM product_attribute_line WHERE product_tmpl_id=(product_template_id)) WHERE product_attribute_id is null;")
+		http.request.env.cr.execute("SELECT * from stock_inventory_line WHERE product_attribute_id is NULL")
+		null_prod_attr_id_recs = http.request.env.cr.dictfetchall()
+		if null_prod_attr_id_recs:
+			http.request.env.cr.execute("UPDATE public.stock_inventory_line SET product_attribute_id=(SELECT attribute_id FROM product_attribute_line WHERE product_tmpl_id=(stock_inventory_line.product_template_id)) WHERE product_attribute_id is null;")
 
-		http.request.env.cr.execute("UPDATE public.stock_inventory_line SET product_attribute_name=(SELECT name FROM product_attribute WHERE id=(product_attribute_id)) WHERE product_attribute_name is null;")
+		http.request.env.cr.execute("SELECT * from stock_inventory_line WHERE product_attribute_name is NULL")
+		null_prod_attr_name_recs = http.request.env.cr.dictfetchall()
+		if null_prod_attr_name_recs:
+			http.request.env.cr.execute("UPDATE public.stock_inventory_line SET product_attribute_name=(SELECT name FROM product_attribute WHERE id=(stock_inventory_line.product_attribute_id)) WHERE product_attribute_name is null;")
 
-		http.request.env.cr.execute("UPDATE public.stock_inventory_line SET product_category_id=(SELECT categ_id FROM product_template WHERE id=(product_template_id)) WHERE product_category_id is null;")
+		http.request.env.cr.execute("SELECT * from stock_inventory_line WHERE product_category_id is NULL")
+		null_prod_categ_id_recs = http.request.env.cr.dictfetchall()
+		if null_prod_categ_id_recs:
+			http.request.env.cr.execute("UPDATE public.stock_inventory_line SET product_category_id=(SELECT categ_id FROM product_template WHERE id=(stock_inventory_line.product_template_id)) WHERE product_category_id is null;")
 
-		http.request.env.cr.execute("UPDATE public.stock_inventory_line SET product_category_name=(SELECT name FROM product_category WHERE id=(product_category_id)) WHERE product_category_name is null;")
+		http.request.env.cr.execute("SELECT * from stock_inventory_line WHERE product_category_name is NULL")
+		null_prod_categ_name_recs = http.request.env.cr.dictfetchall()
+		if null_prod_categ_name_recs:
+			http.request.env.cr.execute("UPDATE public.stock_inventory_line SET product_category_name=(SELECT name FROM product_category WHERE id=(stock_inventory_line.product_category_id)) WHERE product_category_name is null;")
 
-		http.request.env.cr.execute("UPDATE public.stock_inventory_line SET product_attribute_value_id=(SELECT product_attribute_value_id FROM product_attribute_value_product_product_rel WHERE product_product_id=(product_id)) WHERE product_attribute_value_id is null;")
+		http.request.env.cr.execute("SELECT * from stock_inventory_line WHERE product_attribute_value_id is NULL")
+		null_prod_attr_val_id_recs = http.request.env.cr.dictfetchall()
+		if null_prod_attr_val_id_recs:
+			http.request.env.cr.execute("UPDATE public.stock_inventory_line SET product_attribute_value_id=(SELECT product_attribute_value_id FROM product_attribute_value_product_product_rel WHERE product_product_id=(stock_inventory_line.product_id)) WHERE product_attribute_value_id is null;")
 
-		http.request.env.cr.execute("UPDATE public.stock_inventory_line SET product_attribute_value_name=(SELECT name FROM product_attribute_value WHERE id=(product_attribute_value_id)) WHERE product_attribute_value_name is null;")
+		http.request.env.cr.execute("SELECT * from stock_inventory_line WHERE product_attribute_value_name is NULL")
+		null_prod_attr_val_name_recs = http.request.env.cr.dictfetchall()
+		if null_prod_attr_val_name_recs:
+			http.request.env.cr.execute("UPDATE public.stock_inventory_line SET product_attribute_value_name=(SELECT name FROM product_attribute_value WHERE id=(stock_inventory_line.product_attribute_value_id)) WHERE product_attribute_value_name is null;")
 
-		http.request.env.cr.execute("UPDATE public.stock_inventory_line SET actual_qty=(select currentTable.product_qty from (select product_id, MAX(create_date) as create_date from stock_inventory_line group by product_id) as newTable Inner JOIN stock_inventory_line as currentTable ON newTable.product_id = currentTable.product_id AND newTable.create_date = currentTable.create_date WHERE newTable.product_id =(stock_inventory_line.product_id)) where actual_qty is null;")
+		http.request.env.cr.execute("SELECT * from stock_inventory_line WHERE actual_qty is NULL")
+		null_prod_actqty_recs = http.request.env.cr.dictfetchall()
+		if null_prod_actqty_recs:
+			http.request.env.cr.execute("UPDATE public.stock_inventory_line SET actual_qty=(select currentTable.product_qty from (select product_id, MAX(create_date) as create_date from stock_inventory_line group by product_id) as newTable Inner JOIN stock_inventory_line as currentTable ON newTable.product_id = currentTable.product_id AND newTable.create_date = currentTable.create_date WHERE newTable.product_id =(stock_inventory_line.product_id)) where actual_qty is null;")
 
 		http.request.env.cr.execute("SELECT * FROM stock_inventory_line WHERE product_category_fullname is NULL;")
 		null_prod_categnames = http.request.env.cr.dictfetchall()

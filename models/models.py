@@ -48,8 +48,11 @@ class InventoryReports(models.Model):
 	@api.one
 	@api.depends('product_id')
 	def get_product_attribute_value_id(self):
-		self.env.cr.execute("SELECT product_attribute_value_id FROM product_attribute_value_product_product_rel WHERE product_product_id=%s", [(self.product_id.id)])
-		self.product_attribute_value_id = self.env.cr.fetchone()[0]
+		for record in self:
+			self.env.cr.execute("SELECT product_attribute_value_id FROM product_attribute_value_product_product_rel WHERE product_product_id=%s", [(record.product_id.id)])
+		# results = self.env.cr.fetchall()
+		# for record in results:
+			self.product_attribute_value_id = self.env.cr.fetchone()[0]
 
 	@api.one
 	@api.depends('product_attribute_id')
@@ -75,12 +78,13 @@ class InventoryReports(models.Model):
 			db_object = table.search([('id', '=', record.product_category_id)])
 			self.product_category_name  = db_object.name
 
+	@api.one
 	@api.depends('product_category_id')
 	def get_product_category_fullname(self):
 		table = self.env['product.category']
+		num_rows = table.search_count([])
 		for record in self:
 			db_object = table.search([('id', '=', record.product_category_id)])
-			num_rows = table.search_count([])
 			temp_cat_name = []
 			for i in range(0,num_rows):
 				if db_object.parent_id:
