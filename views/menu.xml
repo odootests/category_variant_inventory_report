@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	
+	<record id='categ_attribute_inventory_report_action' model='ir.actions.act_url'>
+        <field name='name'>Category x Attribute Inventory URL Action</field>
+        <field name='type'>ir.actions.act_url</field>
+        <field name='target'>self</field>
+        <field name='url'>inventory/current</field>
+    </record>	
+
+	<menuitem name='Advanced Reports' id='menuitem_inventory_report_root' parent='stock.menu_stock_root' sequence='31'/>
+	<menuitem action='categ_attribute_inventory_report_action' id='menuitem_categ_attr_inven_report' name='Categ-Attribute Inventory' parent='menuitem_inventory_report_root' sequence='1'/>
+
+</odoo>
