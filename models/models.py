@@ -30,11 +30,12 @@ class InventoryReports(models.Model):
 			self.product_template_name = db_object.name
 
 	@api.one
-	@api.depends('product_template_id')
+	@api.depends('product_attribute_value_id')
 	def get_product_attribute_id(self):
-		table = self.env['product.attribute.line']
+		# table = self.env['product.attribute.line']
+		table = self.env['product.attribute.value']
 		for record in self:
-			db_object = table.search([('product_tmpl_id', '=', record.product_template_id)])
+			db_object = table.search([('id', '=', record.product_attribute_value_id)])
 			self.product_attribute_id = db_object.attribute_id
 
 	@api.one
