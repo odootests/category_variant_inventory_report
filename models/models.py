@@ -48,11 +48,14 @@ class InventoryReports(models.Model):
 	@api.one
 	@api.depends('product_id')
 	def get_product_attribute_value_id(self):
+		# table = self.env['product.attribute.value.product.product.rel']
 		for record in self:
+			# db_object = table.search(['product_product_id', '=', record.product_id.id])
 			self.env.cr.execute("SELECT product_attribute_value_id FROM product_attribute_value_product_product_rel WHERE product_product_id=%s", [(record.product_id.id)])
 		# results = self.env.cr.fetchall()
 		# for record in results:
 			self.product_attribute_value_id = self.env.cr.fetchone()[0]
+			#self.product_attribute_value_id = db_object.product_attribute_value_id
 
 	@api.one
 	@api.depends('product_attribute_id')
