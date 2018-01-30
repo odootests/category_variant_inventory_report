@@ -55,7 +55,11 @@ class InventoryReports(models.Model):
 			self.env.cr.execute("SELECT product_attribute_value_id FROM product_attribute_value_product_product_rel WHERE product_product_id=%s", [(record.product_id.id)])
 		# results = self.env.cr.fetchall()
 		# for record in results:
-			self.product_attribute_value_id = self.env.cr.fetchone()[0]
+			result = self.env.cr.fetchall()
+			theID = 0
+			for row in result:
+				theID = row[0]
+			self.product_attribute_value_id = theID
 			#self.product_attribute_value_id = db_object.product_attribute_value_id
 
 	@api.one
