@@ -4,13 +4,13 @@
 		<template id="assets_backend" name="category_variant_inventory_report assets" inherit_id="web.assets_backend">
 			<xpath expr="." position="inside">
 				<script type="text/javascript" src="/category_variant_inventory_report/static/src/js/tableExport.js"></script>
-				<!-- <script type="text/javascript" src="/category_variant_inventory_report/static/src/js/jquery.dataTables.min.js"></script>
+				<script type="text/javascript" src="/category_variant_inventory_report/static/src/js/jquery.dataTables.min.js"></script>
 				<script type="text/javascript" src="/category_variant_inventory_report/static/src/js/dataTables.buttons.min.js"></script>
 				<script type="text/javascript" src="/category_variant_inventory_report/static/src/js/jszip.min.js"></script>
 
 				<script type="text/javascript" src="/category_variant_inventory_report/static/src/js/buttons.html5.min.js"></script>
 				
-				<script type="text/javascript" src="/category_variant_inventory_report/static/src/js/vfs_fonts.js"></script> -->
+				<script type="text/javascript" src="/category_variant_inventory_report/static/src/js/vfs_fonts.js"></script>
 			</xpath>
 		</template>
 	</data>

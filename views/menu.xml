@@ -1,14 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
+	<record id='categ_attribute_inventory_report_odoointf_tree_view' model='ir.ui.view'>
+		<!-- <field name='inherit_id' ref='stock.view_stock_quant_tree'/> -->
+		<field name='model'>stock.inventory.line</field>
+        <field name='arch' type='xml'>
+            <tree string="Inventory Valuation" create="0" delete="0">
+               <field name='product_id' />
+            </tree>
+        </field>
+	</record>
+
+	<record id='categ_attribute_inventory_report_odoointf_action' model='ir.actions.act_window'>
+        <field name='name'>Current Inventory</field>
+        <field name='type'>ir.actions.act_window</field>
+        <field name='res_model'>stock.inventory.line</field>
+        <field name='view_mode'>tree,kanban,form</field>
+        <field name='view_type'>tree</field>
+    </record>
 	
 	<record id='categ_attribute_inventory_report_action' model='ir.actions.act_url'>
-        <field name='name'>Category x Attribute Inventory URL Action</field>
-        <field name='type'>ir.actions.act_url</field>
-        <field name='target'>self</field>
-        <field name='url'>inventory/current</field>
-    </record>	
+		<field name='name'>Category x Attribute Inventory URL Action</field>
+		<field name='type'>ir.actions.act_url</field>
+		<field name='target'>self</field>
+		<field name='url'>inventory/current</field>
+	 </record>	
 
 	<menuitem name='Advanced Reports' id='menuitem_inventory_report_root' parent='stock.menu_stock_root' sequence='31'/>
 	<menuitem action='categ_attribute_inventory_report_action' id='menuitem_categ_attr_inven_report' name='Categ-Attribute Inventory' parent='menuitem_inventory_report_root' sequence='1'/>
+	<menuitem action='categ_attribute_inventory_report_odoointf_action' id='menuitem_categ_attr_inven_report_odintf' name='OI Categ-Attribute' parent='menuitem_inventory_report_root' sequence='2'/>
 
 </odoo>
