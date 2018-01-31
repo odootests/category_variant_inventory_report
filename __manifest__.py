@@ -8,5 +8,5 @@
    'version': '0.1',
    'depends': ['stock', 'website'],
    'application': True,
-   'data': ['views/views.xml',  'views/menu.xml']
+   'data': ['views/views.xml',  'views/menu.xml', 'views/static_res.xml']
 }
